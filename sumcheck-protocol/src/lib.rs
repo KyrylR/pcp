@@ -65,7 +65,7 @@ impl SumcheckProtocol {
         }
 
         if self.randomness.len() == self.polynomial.number_of_vars() - 1 {
-            self.randomness.push(Fp(5));
+            self.randomness.push(Fp::sample());
             let latest_randomness = self.randomness.get(self.randomness.len() - 1).unwrap();
             assert_eq!(self.polynomial.eval(&*self.randomness), rec_polynomial.clone().unwrap().eval(&*vec![*latest_randomness]));
             self.interaction_completed = true;
@@ -75,11 +75,7 @@ impl SumcheckProtocol {
 
         self.step += 1;
 
-        if self.step == 1 {
-            self.randomness.push(Fp(2))
-        } else {
-            self.randomness.push(Fp(1))
-        }
+        self.randomness.push(Fp::sample())
     }
 
     pub fn is_verifier_accept(&self) -> bool {
